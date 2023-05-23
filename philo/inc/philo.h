@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/17 10:43:04 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:26:28 by hakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,23 @@
 # define OPT 4
 
 typedef struct timeval	t_time;
+typedef pthread_mutex_t	t_mtx;
 
 typedef struct s_philo
 {
+	pthread_t	tid;
 	int				number;
-	int				params[5];
+	int				*params;
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
 	long			last_meal;
 }					t_philo;
+
+typedef struct s_shared
+{
+	int	*params;
+	long	start;
+}	t_shared;
 
 /* utilities */
 void	mssleep(long ms);

@@ -6,7 +6,7 @@
 #    By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/14 23:52:05 by hakahmed          #+#    #+#              #
-#    Updated: 2023/05/16 21:13:40 by hakahmed         ###   ########.fr        #
+#    Updated: 2023/05/17 14:29:25 by hakim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ CFLAGS += -I $(INC)
 INC = inc
 
 LDFLAGS = -pthread
+
+# LDFLAGS += -fsanitize=thread
 
 SRCDIR = src
 
