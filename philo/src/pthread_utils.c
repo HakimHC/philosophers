@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:34:56 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:17:16 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:49:54 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 t_mtx	*mk_forks(int n, int *status)
 {
 	int		i;
-	pthread_mutex_t	*arr;
+	t_mtx	*arr;
 
 	arr = (pthread_mutex_t *) malloc(n * sizeof(pthread_mutex_t));
 	if (!arr)
@@ -38,7 +38,7 @@ t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob)
 
 	p = malloc(sizeof(t_philo));
 	if (!p)
-		return ((t_philo *)NULL);
+		return ((t_philo *) NULL);
 	p->number = number;
 	p->params = glob->params;
 	p->fork_l = l;
@@ -51,8 +51,9 @@ t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob)
 int	mk_threads(t_data *glob)
 {
 	t_philo	**philos;
-	int	i;
-	int	n;
+	int		i;
+	int		n;
+
 	n = glob->params[NUM_PHIL];
 	philos = malloc(n * sizeof(t_philo *));
 	if (!philos)
@@ -60,16 +61,14 @@ int	mk_threads(t_data *glob)
 	i = 0;
 	while (i < n)
 	{
-		philos[i] = mk_philo(i + 1, &glob->forks[(i + n - 1) % n], &glob->forks[i], glob);
+		philos[i] = mk_philo(i + 1, &glob->forks[(i + n - 1) % n],
+				&glob->forks[i], glob);
 		if (!philos[i])
 			return (ERR_MALLOC);
-		if (pthread_create(&(philos[i]->tid), NULL, routine, philos[i]) == -1)
+		if (pthread_create(&(philos[i]->tid), NULL, routine, philos[i]))
 			return (ERR_THREAD);
 		i++;
 	}
-	/* i = 0; */
-	/* while (i < n) */
-	/* 	pthread_join(philos[i++]->tid, NULL); */
 	glob->p = philos;
 	return (0);
 }

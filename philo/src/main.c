@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:34:18 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:47:41 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,24 @@
 
 #include "philo.h"
 
+void	take_fork(t_philo *p, int f)
+{
+	if (f == 1)
+	{
+		if (p->fork_r > p->fork_l)
+			pthread_mutex_lock(p->fork_r);
+		else
+			pthread_mutex_lock(p->fork_l);
+	}
+	else
+	{
+		if (p->fork_r > p->fork_l)
+			pthread_mutex_lock(p->fork_l);
+		else
+			pthread_mutex_lock(p->fork_r);
+	}
+}
+
 void	*routine(void *arg)
 {
 	t_philo	*p;
@@ -26,15 +44,9 @@ void	*routine(void *arg)
 		usleep(200);
 	while (1)
 	{
-		if (p->fork_r > p->fork_l)
-			pthread_mutex_lock(p->fork_r);
-		else
-			pthread_mutex_lock(p->fork_l);
+		take_fork(p, 1);
 		print_msg(&p, FR);
-		if (p->fork_r > p->fork_l)
-			pthread_mutex_lock(p->fork_l);
-		else
-			pthread_mutex_lock(p->fork_r);
+		take_fork(p, 2);
 		p->last_meal = get_curr_ms(p->glob->start);
 		print_msg(&p, FL);
 		print_msg(&p, EATMSG);
@@ -49,10 +61,17 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
+void	print_death_msg(t_data *data, int n)
+{
+	pthread_mutex_lock(&(data->mtx_print));
+	printf("%li ms: %d died\n", get_curr_ms(data->start), n);
+	pthread_mutex_unlock(&(data->mtx_print));
+}
+
 int	watchdog(t_data *data)
 {
-	int	i;
-	int	b;
+	int		i;
+	int		b;
 	t_philo	*p;
 
 	while (1)
@@ -63,30 +82,26 @@ int	watchdog(t_data *data)
 		{
 			p = (data->p)[i];
 			if (get_curr_ms(data->start) - p->last_meal > p->params[TDIE])
-			{
-				pthread_mutex_lock(&(data->mtx_print));
-				printf("%li ms: %d died\n", get_curr_ms(data->start), p->number);
-				pthread_mutex_unlock(&(data->mtx_print));
-				return 1;
-			}
+				return (print_death_msg(data, p->number), 1);
 			if (p->params[OPT] != -1 && p->meal_count >= p->params[OPT])
 				b++;
 			i++;
 		}
 		if (b == data->params[NUM_PHIL])
-			return 0;
+			return (0);
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	t_data		*res;
+	t_data	*res;
 	int		status;
-	
+
 	res = init_data(argc, argv, &status);
 	if (status)
 		return (print_error_msg(status));
 	mk_threads(res);
 	if (!watchdog(res))
-		printf("Everyone has eaten %d times, ending simulation...\n", res->params[OPT]);
+		printf("Everyone has eaten %d times, ending simulation...\n",
+			res->params[OPT]);
 }

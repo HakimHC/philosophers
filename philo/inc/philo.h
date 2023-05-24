@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:19:42 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:41:10 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,28 @@
 
 typedef struct timeval	t_time;
 typedef pthread_mutex_t	t_mtx;
-
+typedef struct s_philo	t_philo;
 
 typedef struct s_data
 {
-	long	start;
-	int	*params;
-	t_mtx	*forks;
-	struct s_philo **p;
-	t_mtx	mtx_print;
+	long		start;
+	int			*params;
+	t_mtx		*forks;
+	t_philo		**p;
+	t_mtx		mtx_print;
 }	t_data;
 
-typedef struct s_philo
+struct s_philo
 {
 	pthread_t	tid;
-	int				number;
-	int				*params;
-	t_mtx	*fork_l;
-	t_mtx	*fork_r;
-	long			last_meal;
+	int			number;
+	int			*params;
+	t_mtx		*fork_l;
+	t_mtx		*fork_r;
+	long		last_meal;
 	int			meal_count;
-	t_data	*glob;
-}					t_philo;
+	t_data		*glob;
+};
 
 /* time utilities */
 void	mssleep(long ms);
@@ -77,15 +77,15 @@ void	print_msg(t_philo **p, char *msg);
 /* pthread utilities */
 t_mtx	*mk_forks(int n, int *status);
 t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob);
-int	mk_threads(t_data *glob);
+int		mk_threads(t_data *glob);
 
 /* error handling */
-int	err_handl(int argc, char **argv, int *params);
+int		err_handl(int argc, char **argv, int *params);
 void	*set_status(int *status, int state);
-int	print_error_msg(int status);
+int		print_error_msg(int status);
 
 /* init */
-int	populate_params(int *params, char **args);
+int		populate_params(int *params, char **args);
 t_data	*init_data(int argc, char **argv, int *status);
 
 void	*routine(void *arg);

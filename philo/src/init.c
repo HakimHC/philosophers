@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:37:07 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 14:38:27 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:41:33 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	populate_params(int *params, char **args)
 
 t_data	*init_data(int argc, char **argv, int *status)
 {
-	t_data *res;
+	t_data	*res;
 
 	*status = 0;
 	res = malloc(sizeof(t_data));
