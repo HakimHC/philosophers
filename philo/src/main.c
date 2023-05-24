@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 14:59:27 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:34:18 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,19 @@ void	*routine(void *arg)
 		usleep(200);
 	while (1)
 	{
-		pthread_mutex_lock(p->fork_r);
+		if (p->fork_r > p->fork_l)
+			pthread_mutex_lock(p->fork_r);
+		else
+			pthread_mutex_lock(p->fork_l);
 		print_msg(&p, FR);
-		pthread_mutex_lock(p->fork_l);
+		if (p->fork_r > p->fork_l)
+			pthread_mutex_lock(p->fork_l);
+		else
+			pthread_mutex_lock(p->fork_r);
+		p->last_meal = get_curr_ms(p->glob->start);
 		print_msg(&p, FL);
 		print_msg(&p, EATMSG);
-		p->last_meal = get_tm() - p->glob->start;
+		p->meal_count++;
 		mssleep(p->params[TEAT]);
 		pthread_mutex_unlock(p->fork_r);
 		pthread_mutex_unlock(p->fork_l);
@@ -40,6 +47,35 @@ void	*routine(void *arg)
 		print_msg(&p, THINKMSG);
 	}
 	return (NULL);
+}
+
+int	watchdog(t_data *data)
+{
+	int	i;
+	int	b;
+	t_philo	*p;
+
+	while (1)
+	{
+		i = 0;
+		b = 0;
+		while (i < (data->params)[NUM_PHIL])
+		{
+			p = (data->p)[i];
+			if (get_curr_ms(data->start) - p->last_meal > p->params[TDIE])
+			{
+				pthread_mutex_lock(&(data->mtx_print));
+				printf("%li ms: %d died\n", get_curr_ms(data->start), p->number);
+				pthread_mutex_unlock(&(data->mtx_print));
+				return 1;
+			}
+			if (p->params[OPT] != -1 && p->meal_count >= p->params[OPT])
+				b++;
+			i++;
+		}
+		if (b == data->params[NUM_PHIL])
+			return 0;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -51,4 +87,6 @@ int	main(int argc, char **argv)
 	if (status)
 		return (print_error_msg(status));
 	mk_threads(res);
+	if (!watchdog(res))
+		printf("Everyone has eaten %d times, ending simulation...\n", res->params[OPT]);
 }

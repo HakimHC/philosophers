@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:34:56 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 14:35:36 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:17:16 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob)
 	p->fork_l = l;
 	p->fork_r = r;
 	p->glob = glob;
+	p->meal_count = 0;
 	return (p);
 }
 
@@ -66,8 +67,9 @@ int	mk_threads(t_data *glob)
 			return (ERR_THREAD);
 		i++;
 	}
-	i = 0;
-	while (i < n)
-		pthread_join(philos[i++]->tid, NULL);
+	/* i = 0; */
+	/* while (i < n) */
+	/* 	pthread_join(philos[i++]->tid, NULL); */
+	glob->p = philos;
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/14 23:52:05 by hakahmed          #+#    #+#              #
-#    Updated: 2023/05/24 14:37:56 by hakahmed         ###   ########.fr        #
+#    Updated: 2023/05/24 20:34:37 by hakahmed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ INC = inc
 LDFLAGS = -pthread
 
 # LDFLAGS += -fsanitize=thread
+
+# LDFLAGS += -fsanitize=leak
 
 SRCDIR = src
 

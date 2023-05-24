@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 15:06:23 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:19:42 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define EATMSG "is eating"
 # define SLEEPMSG "is sleeping"
 # define THINKMSG "is thinking"
+# define DEATHMSG "died"
 
 # define ERR_MALLOC 1
 # define ERR_THREAD 2
@@ -39,10 +40,11 @@ typedef pthread_mutex_t	t_mtx;
 
 typedef struct s_data
 {
+	long	start;
 	int	*params;
 	t_mtx	*forks;
+	struct s_philo **p;
 	t_mtx	mtx_print;
-	long	start;
 }	t_data;
 
 typedef struct s_philo
@@ -53,6 +55,7 @@ typedef struct s_philo
 	t_mtx	*fork_l;
 	t_mtx	*fork_r;
 	long			last_meal;
+	int			meal_count;
 	t_data	*glob;
 }					t_philo;
 
