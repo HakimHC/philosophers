@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 11:40:01 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:01:00 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define TSLEEP 3
 # define OPT 4
 # define FORKMSG "has taken a fork"
+# define FL "has taken the left fork"
+# define FR "has taken the right fork"
 # define EATMSG "is eating"
 # define SLEEPMSG "is sleeping"
 # define THINKMSG "is thinking"
@@ -32,6 +34,7 @@ typedef pthread_mutex_t	t_mtx;
 typedef struct s_shared
 {
 	int	*params;
+	t_mtx	mtx_print;
 	long	start;
 }	t_shared;
 
@@ -43,7 +46,7 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
 	long			last_meal;
-	t_shared	glob;
+	t_shared	*glob;
 }					t_philo;
 
 /* utilities */
@@ -56,4 +59,5 @@ int		ft_isinteger(char *element);
 void	ft_putstr_fd(char *str, int fd);
 long	get_curr_ms(long start);
 
+void	*routine(void *arg);
 #endif
