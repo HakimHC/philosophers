@@ -6,7 +6,7 @@
 #    By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/14 23:52:05 by hakahmed          #+#    #+#              #
-#    Updated: 2023/05/24 20:34:37 by hakahmed         ###   ########.fr        #
+#    Updated: 2023/05/24 21:28:14 by hakahmed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,14 +26,17 @@ INC = inc
 
 LDFLAGS = -pthread
 
-# LDFLAGS += -fsanitize=thread
+LDFLAGS += -fsanitize=thread
 
-# LDFLAGS += -fsanitize=leak
+LDFLAGS += -fsanitize=leak
+
+# LDFLAGS += -fsanitize=address
 
 SRCDIR = src
 
 SRCFILES = main.c \
 	   init.c \
+	   routine.c \
 	   parse_utils.c \
 	   time_utils.c \
 	   print_utils.c \

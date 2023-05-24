@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:41:10 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 21:26:40 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int		ft_isinteger(char *element);
 /* print utilities */
 void	ft_putstr_fd(char *str, int fd);
 void	print_msg(t_philo **p, char *msg);
+void	print_death_msg(t_data *data, int n);
 
 /* pthread utilities */
 t_mtx	*mk_forks(int n, int *status);
@@ -83,6 +84,11 @@ int		mk_threads(t_data *glob);
 int		err_handl(int argc, char **argv, int *params);
 void	*set_status(int *status, int state);
 int		print_error_msg(int status);
+
+/* routine */
+void	take_fork(t_philo *p, int f);
+void	*routine(void *arg);
+int		watchdog(t_data *data);
 
 /* init */
 int		populate_params(int *params, char **args);
