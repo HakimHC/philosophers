@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 21:26:59 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 22:10:24 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	main(int argc, char **argv)
 	data = init_data(argc, argv, &status);
 	if (status)
 		return (print_error_msg(status));
-	mk_threads(data);
+	status = mk_threads(data);
+	if (status)
+		return (print_error_msg(status));
 	if (watchdog(data) == EXIT_SUCCESS)
 	{
 		kill_them_all(data);
@@ -62,5 +64,5 @@ int	main(int argc, char **argv)
 			data->params[OPT]);
 		pthread_mutex_unlock(&(data->mtx_print));
 	}
-	destroyer(data);
+	/* destroyer(data); */
 }

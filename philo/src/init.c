@@ -6,10 +6,11 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:37:07 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:41:33 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 22:22:28 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
 #include <stdlib.h>
 
 #include "philo.h"
@@ -33,23 +34,26 @@ int	populate_params(int *params, char **args)
 
 t_data	*init_data(int argc, char **argv, int *status)
 {
-	t_data	*res;
+	t_data	*data;
 
 	*status = 0;
-	res = malloc(sizeof(t_data));
-	if (!res)
+	data = malloc(sizeof(t_data));
+	if (!data)
 		return (set_status(status, ERR_MALLOC));
-	res->params = malloc(5 * sizeof(int));
-	if (!res->params)
-		return (set_status(status, ERR_MALLOC));
-	res->start = get_tm();
-	if (pthread_mutex_init(&res->mtx_print, NULL))
-		return (set_status(status, ERR_MTX));
-	if (err_handl(argc, argv, res->params) != EXIT_SUCCESS)
-		return (set_status(status, ERR_ARG));
-	res->forks = mk_forks(res->params[NUM_PHIL], status);
-	if (!res->forks)
-		return (set_status(status, ERR_MALLOC));
-	res->start = get_tm();
-	return (res);
+	data->params = malloc(5 * sizeof(int));
+	if (!data->params)
+		return (free(data), set_status(status, ERR_MALLOC));
+	data->start = get_tm();
+	if (err_handl(argc, argv, data->params) != EXIT_SUCCESS)
+		return (free(data->params), free(data), set_status(status, ERR_ARG));
+	if (pthread_mutex_init(&data->mtx_print, NULL))
+		return (free(data->params), free(data), set_status(status, ERR_MTX));
+	data->forks = mk_forks(data->params[NUM_PHIL], status);
+	if (!data->forks)
+	{
+		pthread_mutex_destroy(&(data->mtx_print));
+		return (free(data), free(data->params), set_status(status, ERR_MALLOC));
+	}
+	data->start = get_tm();
+	return (data);
 }

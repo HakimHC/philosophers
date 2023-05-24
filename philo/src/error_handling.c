@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 13:19:05 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 15:00:07 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 22:10:37 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int	print_error_msg(int status)
 	if (status == ERR_MTX)
 		ft_putstr_fd("fatal: mutex_init: can't initialize mutex\n", 2);
 	if (status == ERR_THREAD)
-		ft_putstr_fd("fatal: pthread_create: can't create thread", 2);
+		ft_putstr_fd("fatal: pthread_create: can't create thread\n", 2);
 	return (1);
 }
