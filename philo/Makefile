@@ -6,7 +6,7 @@
 #    By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/14 23:52:05 by hakahmed          #+#    #+#              #
-#    Updated: 2023/05/17 14:29:25 by hakim            ###   ########.fr        #
+#    Updated: 2023/05/24 14:37:56 by hakahmed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,8 +31,12 @@ LDFLAGS = -pthread
 SRCDIR = src
 
 SRCFILES = main.c \
-	   utils.c \
-	   time_utils.c
+	   init.c \
+	   parse_utils.c \
+	   time_utils.c \
+	   print_utils.c \
+	   pthread_utils.c \
+	   error_handling.c
 
 SRC = $(addprefix $(SRCDIR)/,$(SRCFILES))
 

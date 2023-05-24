@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 13:01:00 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:59:17 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define TEAT 2
 # define TSLEEP 3
 # define OPT 4
+
 # define FORKMSG "has taken a fork"
 # define FL "has taken the left fork"
 # define FR "has taken the right fork"
@@ -27,16 +28,22 @@
 # define SLEEPMSG "is sleeping"
 # define THINKMSG "is thinking"
 
+# define ERR_MALLOC 1
+# define ERR_THREAD 2
+# define ERR_ARG 3
+# define ERR_MTX 4
+
 typedef struct timeval	t_time;
 typedef pthread_mutex_t	t_mtx;
 
 
-typedef struct s_shared
+typedef struct s_data
 {
 	int	*params;
+	t_mtx	*forks;
 	t_mtx	mtx_print;
 	long	start;
-}	t_shared;
+}	t_data;
 
 typedef struct s_philo
 {
@@ -46,18 +53,38 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
 	long			last_meal;
-	t_shared	*glob;
+	t_data	*glob;
 }					t_philo;
 
-/* utilities */
+/* time utilities */
 void	mssleep(long ms);
 long	get_tm(void);
+long	get_curr_ms(long start);
+
+/* parse utilities */
 int		ft_isdigit(char c);
 int		ft_isspace(char c);
 int		ft_atoi(char *str);
 int		ft_isinteger(char *element);
+
+/* print utilities */
 void	ft_putstr_fd(char *str, int fd);
-long	get_curr_ms(long start);
+void	print_msg(t_philo **p, char *msg);
+
+/* pthread utilities */
+t_mtx	*mk_forks(int n, int *status);
+t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob);
+int	mk_threads(t_data *glob);
+
+/* error handling */
+int	err_handl(int argc, char **argv, int *params);
+void	*set_status(int *status, int state);
+int	print_error_msg(int status);
+
+/* init */
+int	populate_params(int *params, char **args);
+t_data	*init_data(int argc, char **argv, int *status);
 
 void	*routine(void *arg);
+
 #endif

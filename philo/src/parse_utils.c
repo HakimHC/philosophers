@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 12:32:14 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/16 21:22:14 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:14:50 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,4 @@ int	ft_isinteger(char *element)
 	while (ft_isspace(element[i++]))
 		;
 	return (!(element[i - 1]));
-}
-
-void	ft_putstr_fd(char *str, int fd)
-{
-	while (*str)
-		write(fd, str++, 1);
 }
