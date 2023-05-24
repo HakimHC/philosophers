@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/17 14:26:28 by hakim            ###   ########.fr       */
+/*   Updated: 2023/05/24 11:40:01 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,20 @@
 # define TEAT 2
 # define TSLEEP 3
 # define OPT 4
+# define FORKMSG "has taken a fork"
+# define EATMSG "is eating"
+# define SLEEPMSG "is sleeping"
+# define THINKMSG "is thinking"
 
 typedef struct timeval	t_time;
 typedef pthread_mutex_t	t_mtx;
+
+
+typedef struct s_shared
+{
+	int	*params;
+	long	start;
+}	t_shared;
 
 typedef struct s_philo
 {
@@ -32,13 +43,8 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
 	long			last_meal;
+	t_shared	glob;
 }					t_philo;
-
-typedef struct s_shared
-{
-	int	*params;
-	long	start;
-}	t_shared;
 
 /* utilities */
 void	mssleep(long ms);
@@ -48,5 +54,6 @@ int		ft_isspace(char c);
 int		ft_atoi(char *str);
 int		ft_isinteger(char *element);
 void	ft_putstr_fd(char *str, int fd);
+long	get_curr_ms(long start);
 
 #endif

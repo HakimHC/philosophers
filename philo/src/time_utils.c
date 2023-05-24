@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 21:12:50 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/17 10:43:15 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:49:51 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,9 @@ void	mssleep(long ms)
 	start = get_tm();
 	while (get_tm() - start < ms)
 		;
+}
+
+long	get_curr_ms(long start)
+{
+	return (get_tm() - start);
 }

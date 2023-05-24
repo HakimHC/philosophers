@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/23 10:00:49 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 11:41:41 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_mtx	*mk_forks(int n)
 	return (arr);
 }
 
-t_philo	*mk_philo(int number, pthread_mutex_t *l, pthread_mutex_t *r, int *params)
+t_philo	*mk_philo(int number, pthread_mutex_t *l, pthread_mutex_t *r, t_shared glob)
 {
 	t_philo	*p;
 
@@ -70,10 +70,17 @@ t_philo	*mk_philo(int number, pthread_mutex_t *l, pthread_mutex_t *r, int *param
 	if (!p)
 		return ((t_philo *)NULL);
 	p->number = number;
-	p->params = params;
+	p->params = glob.params;
 	p->fork_l = l;
 	p->fork_r = r;
+	p->glob = glob;
 	return (p);
+}
+
+void	print_msg(t_philo *p, char *msg)
+{
+	printf("%li ms: %d ", get_curr_ms(p->glob.start), p->number);
+	printf("%s\n", msg);
 }
 
 void	*routine(void *arg)
@@ -81,12 +88,21 @@ void	*routine(void *arg)
 	t_philo	*p;
 
 	p = arg;
-	pthread_mutex_lock(p->fork_r);
-	printf("%d has taken a fork\n", p->number);
-	pthread_mutex_lock(p->fork_l);
-	printf("%d has taken a fork\n", p->number);
-	pthread_mutex_unlock(p->fork_r);
-	pthread_mutex_unlock(p->fork_l);
+	while (1)
+	{
+		pthread_mutex_lock(p->fork_r);
+		print_msg(p, FORKMSG);
+		pthread_mutex_lock(p->fork_l);
+		print_msg(p, FORKMSG);
+		print_msg(p, EATMSG);
+		p->last_meal = get_tm() - p->glob.start;
+		mssleep(p->params[TEAT]);
+		pthread_mutex_unlock(p->fork_r);
+		pthread_mutex_unlock(p->fork_l);
+		print_msg(p, SLEEPMSG);
+		mssleep(p->params[TSLEEP]);
+		print_msg(p, THINKMSG);
+	}
 	return (NULL);
 }
 
@@ -104,10 +120,11 @@ int	main(int argc, char **argv)
 	if (err_handl(argc, argv, resc.params) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	forks = mk_forks(2);
-	p1 = mk_philo(1, forks, forks + 1, resc.params);
-	p2 = mk_philo(2, forks, forks + 1, resc.params);
+	p1 = mk_philo(1, forks, forks + 1, resc);
+	p2 = mk_philo(2, forks, forks + 1, resc);
 	pthread_create(&(p1->tid), NULL, routine, p1);
 	pthread_create(&(p2->tid), NULL, routine, p2);
 	pthread_join(p1->tid, NULL);
 	pthread_join(p2->tid, NULL);
+	free(resc.params);
 }
