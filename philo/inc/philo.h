@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 14:59:17 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:06:23 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ typedef struct s_philo
 	pthread_t	tid;
 	int				number;
 	int				*params;
-	pthread_mutex_t	*fork_l;
-	pthread_mutex_t	*fork_r;
+	t_mtx	*fork_l;
+	t_mtx	*fork_r;
 	long			last_meal;
 	t_data	*glob;
 }					t_philo;
