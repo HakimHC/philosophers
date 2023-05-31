@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 21:23:47 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 14:30:04 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:45:05 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ void	take_fork(t_philo *p, int f)
 	}
 }
 
+int	check_d(t_philo *p)
+{
+	int	b;
+
+	pthread_mutex_lock(p->glob->mtx_print);
+	b = p->glob->end;
+	pthread_mutex_unlock(p->glob->mtx_print);
+	return (b);
+}
+
 void	*routine(void *arg)
 {
 	t_philo	*p;
@@ -39,7 +49,7 @@ void	*routine(void *arg)
 	p = arg;
 	if (p->number % 2 == 0)
 		usleep(200);
-	while (1)
+	while (!p->glob->end)
 	{
 		take_fork(p, 1);
 		print_msg(&p, FORKMSG);
@@ -48,10 +58,14 @@ void	*routine(void *arg)
 		print_msg(&p, FORKMSG);
 		print_msg(&p, EATMSG);
 		p->meal_count++;
+		if (check_d(p))
+			return (NULL);
 		mssleep(p->params[TEAT]);
 		pthread_mutex_unlock(p->fork_r);
 		pthread_mutex_unlock(p->fork_l);
 		print_msg(&p, SLEEPMSG);
+		if (check_d(p))
+			return (NULL);
 		mssleep(p->params[TSLEEP]);
 		print_msg(&p, THINKMSG);
 	}
