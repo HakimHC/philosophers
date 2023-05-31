@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 22:10:24 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:25:28 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int	main(int argc, char **argv)
 	if (watchdog(data) == EXIT_SUCCESS)
 	{
 		kill_them_all(data);
-		pthread_mutex_lock(&(data->mtx_print));
+		pthread_mutex_lock(data->mtx_print);
 		printf("Everyone has eaten %d times, ending simulation...\n",
 			data->params[OPT]);
-		pthread_mutex_unlock(&(data->mtx_print));
+		pthread_mutex_unlock(data->mtx_print);
 	}
 	/* destroyer(data); */
 }

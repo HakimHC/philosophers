@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:37:07 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 22:22:28 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:27:37 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,18 @@ t_data	*init_data(int argc, char **argv, int *status)
 	data->start = get_tm();
 	if (err_handl(argc, argv, data->params) != EXIT_SUCCESS)
 		return (free(data->params), free(data), set_status(status, ERR_ARG));
-	if (pthread_mutex_init(&data->mtx_print, NULL))
+	data->mtx_print = malloc(sizeof(t_mtx));
+	if (!data->mtx_print)
+		return (set_status(status , ERR_MALLOC));
+	if (pthread_mutex_init(data->mtx_print, NULL))
 		return (free(data->params), free(data), set_status(status, ERR_MTX));
 	data->forks = mk_forks(data->params[NUM_PHIL], status);
 	if (!data->forks)
 	{
-		pthread_mutex_destroy(&(data->mtx_print));
+		pthread_mutex_destroy(data->mtx_print);
 		return (free(data), free(data->params), set_status(status, ERR_MALLOC));
 	}
 	data->start = get_tm();
+	data->end = 0;
 	return (data);
 }

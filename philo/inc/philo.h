@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 21:26:40 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:27:28 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ typedef struct s_data
 	int			*params;
 	t_mtx		*forks;
 	t_philo		**p;
-	t_mtx		mtx_print;
+	t_mtx		*mtx_print;
+	int			end;
 }	t_data;
 
 struct s_philo
