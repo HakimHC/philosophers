@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 14:34:56 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/24 20:49:54 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:16:07 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,10 @@ int	mk_threads(t_data *glob)
 	}
 	glob->p = philos;
 	return (0);
+}
+
+void	release_forks(t_philo *p)
+{
+	pthread_mutex_unlock(p->fork_r);
+	pthread_mutex_unlock(p->fork_l);
 }

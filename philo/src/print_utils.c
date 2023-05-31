@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 13:13:53 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 14:27:16 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:47:13 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ft_putstr_fd(char *str, int fd)
 void	print_death_msg(t_data *data, int n)
 {
 	pthread_mutex_lock(data->mtx_print);
+	data->end = 1;
 	printf("%li ms: %d died\n", get_curr_ms(data->start), n);
 	pthread_mutex_unlock(data->mtx_print);
 }

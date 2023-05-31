@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 21:23:47 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 14:45:05 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:16:24 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ void	*routine(void *arg)
 		if (check_d(p))
 			return (NULL);
 		mssleep(p->params[TEAT]);
-		pthread_mutex_unlock(p->fork_r);
-		pthread_mutex_unlock(p->fork_l);
+		release_forks(p);
 		print_msg(&p, SLEEPMSG);
 		if (check_d(p))
 			return (NULL);
@@ -80,24 +79,23 @@ int	watchdog(t_data *data)
 
 	while (1)
 	{
-		i = 0;
+		i = -1;
 		b = 0;
-		while (i < (data->params)[NUM_PHIL])
+		while (++i < (data->params)[NUM_PHIL])
 		{
 			p = (data->p)[i];
 			if (get_curr_ms(data->start) - p->last_meal > p->params[TDIE])
-			{
-				pthread_mutex_lock(data->mtx_print);
-				data->end = 1;
-				pthread_mutex_unlock(data->mtx_print);
 				return (print_death_msg(data, p->number), 1);
-			}
 			if (p->params[OPT] != -1 && p->meal_count >= p->params[OPT])
 				b++;
-			i++;
 		}
 		if (b == data->params[NUM_PHIL])
+		{
+			pthread_mutex_lock(data->mtx_print);
+			data->end = 1;
+			pthread_mutex_unlock(data->mtx_print);
 			return (0);
+		}
 		usleep(20);
 	}
 }

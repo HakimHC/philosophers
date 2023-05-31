@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:52 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 14:44:06 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:17:32 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ void	kill_them_all(t_data *data)
 	while (i < data->params[NUM_PHIL])
 	{
 		p = (data->p)[i];
-		pthread_detach(p->tid);
+		pthread_join(data->p[i]->tid, NULL);
 		free(p);
 		i++;
 	}
 	free(philos);
+	pthread_mutex_destroy(data->mtx_print);
+	free(data->mtx_print);
 }
 
 void	destroyer(t_data *data)
@@ -41,6 +43,7 @@ void	destroyer(t_data *data)
 	i = 0;
 	while (i < data->params[NUM_PHIL])
 		pthread_mutex_destroy((data->forks) + i++);
+	free(data->forks);
 	free(data->params);
 	free(data);
 }
@@ -50,6 +53,7 @@ int	main(int argc, char **argv)
 	t_data	*data;
 	int		status;
 
+	status = 0;
 	data = init_data(argc, argv, &status);
 	if (status)
 		return (print_error_msg(status));
@@ -58,13 +62,11 @@ int	main(int argc, char **argv)
 		return (print_error_msg(status));
 	if (watchdog(data) == EXIT_SUCCESS)
 	{
-		kill_them_all(data);
 		pthread_mutex_lock(data->mtx_print);
 		printf("Everyone has eaten %d times, ending simulation...\n",
 			data->params[OPT]);
 		pthread_mutex_unlock(data->mtx_print);
 	}
-	for (int i = 0; i < data->params[NUM_PHIL]; i++)
-		pthread_join(data->p[i]->tid, NULL);
+	kill_them_all(data);
 	destroyer(data);
 }

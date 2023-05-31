@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 14:27:28 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:16:15 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	print_death_msg(t_data *data, int n);
 t_mtx	*mk_forks(int n, int *status);
 t_philo	*mk_philo(int number, t_mtx *l, t_mtx *r, t_data *glob);
 int		mk_threads(t_data *glob);
+void	release_forks(t_philo *p);
 
 /* error handling */
 int		err_handl(int argc, char **argv, int *params);
