@@ -6,7 +6,7 @@
 /*   By: hakahmed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:52:26 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 15:16:15 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:06:31 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	*set_status(int *status, int state);
 int		print_error_msg(int status);
 
 /* routine */
-void	take_fork(t_philo *p, int f);
+int		take_fork(t_philo *p, int f);
 void	*routine(void *arg);
 int		watchdog(t_data *data);
 

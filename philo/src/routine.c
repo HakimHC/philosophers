@@ -6,7 +6,7 @@
 /*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 21:23:47 by hakahmed          #+#    #+#             */
-/*   Updated: 2023/05/31 15:16:24 by hakahmed         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:06:16 by hakahmed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "philo.h"
 
-void	take_fork(t_philo *p, int f)
+int	take_fork(t_philo *p, int f)
 {
 	if (f == 1)
 	{
@@ -25,11 +25,17 @@ void	take_fork(t_philo *p, int f)
 	}
 	else
 	{
+		if (p->params[NUM_PHIL] == 1)
+		{
+			mssleep(p->params[TDIE]);
+			return (1);
+		}
 		if (p->fork_r > p->fork_l)
 			pthread_mutex_lock(p->fork_l);
 		else
 			pthread_mutex_lock(p->fork_r);
 	}
+	return (0);
 }
 
 int	check_d(t_philo *p)
@@ -40,6 +46,16 @@ int	check_d(t_philo *p)
 	b = p->glob->end;
 	pthread_mutex_unlock(p->glob->mtx_print);
 	return (b);
+}
+
+int	sleep_n_think(t_philo **p)
+{
+	print_msg(p, SLEEPMSG);
+	if (check_d(*p))
+		return (0);
+	mssleep((*p)->params[TSLEEP]);
+	print_msg(p, THINKMSG);
+	return (1);
 }
 
 void	*routine(void *arg)
@@ -53,7 +69,8 @@ void	*routine(void *arg)
 	{
 		take_fork(p, 1);
 		print_msg(&p, FORKMSG);
-		take_fork(p, 2);
+		if (take_fork(p, 2))
+			return (NULL);
 		p->last_meal = get_curr_ms(p->glob->start);
 		print_msg(&p, FORKMSG);
 		print_msg(&p, EATMSG);
@@ -62,11 +79,8 @@ void	*routine(void *arg)
 			return (NULL);
 		mssleep(p->params[TEAT]);
 		release_forks(p);
-		print_msg(&p, SLEEPMSG);
-		if (check_d(p))
+		if (!sleep_n_think(&p))
 			return (NULL);
-		mssleep(p->params[TSLEEP]);
-		print_msg(&p, THINKMSG);
 	}
 	return (NULL);
 }
