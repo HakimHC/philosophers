@@ -1,0 +1,4 @@
+-I./inc
+-Wall
+-Werror
+-Wextra
